@@ -282,6 +282,193 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/01/jwt/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wesaiii">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WESAIIIのblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/02/01/jwt/" itemprop="url">jwt</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-02-01T23:54:09+08:00">
+                2021-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h1> <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cookie &#x2F;session &#x2F;jwt  不同点</span><br><span class="line"></span><br><span class="line">1.对于一般的cookie，如果我们的加密措施不当，很容易造成信息泄露，</span><br><span class="line">甚至信息伪造，这肯定不是我们期望的。</span><br><span class="line">2.session:客户端在服务端登陆成功之后，服务端会生成一个sessionID，</span><br><span class="line">返回给客户端，客户端将sessionID保存到cookie中，session保存在服务端，</span><br><span class="line">当客户访问量增加时，服务端就需要存储大量的session会话，对服务器有很大的考验</span><br><span class="line">3.jwt:在身份验证中，当用户使用他们的凭证成功登录时，</span><br><span class="line">JSON Web Token将被返回并且必须保存在本地</span><br></pre></td></tr></table></figure>
+
+<p>客户端身份经过服务器验证通过后，会生成带有签名的 JSON 对象并将它返回给客户端。<strong>客户端在收到这个 JSON 对象后存储起来</strong></p>
+<p>在以后的请求中客户端将 JSON 对象连同请求内容一起发送给服务器，服务器收到请求后通过 JSON 对象标识用户，如果验证不通过则不返回请求的数据。</p>
+<p>验证不通过的情况有很多，比如签名不正确、无权限等。<strong>在 JWT 中服务器不保存任何会话数据</strong> ，使得服务器更加容易扩展。</p>
+<h1 id="构成"><a href="#构成" class="headerlink" title="构成"></a>构成</h1><h2 id="header"><a href="#header" class="headerlink" title="header"></a><strong>header</strong></h2><p>头部承载两部分信息：</p>
+<ul>
+<li>声明类型，这里是jwt</li>
+<li>声明加密算法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &#39;typ&#39;: &#39;JWT&#39;, </span><br><span class="line">  &#39;alg&#39;: &#39;HS256&#39; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="payload"><a href="#payload" class="headerlink" title="payload"></a><strong>payload</strong></h2><p><strong>载荷就是存放有效信息的地方。这些有效信息包含三个部分</strong></p>
+<ul>
+<li><strong>标准中注册的声明</strong></li>
+<li><strong>公共的声明</strong></li>
+<li><strong>私有的声明</strong></li>
+</ul>
+<p><strong>标准中注册的声明</strong> :</p>
+<ul>
+<li>iss: jwt签发者</li>
+<li>sub: jwt所面向的用户</li>
+<li>aud: 接收jwt的一方</li>
+<li>exp: jwt的过期时间，这个过期时间必须要大于签发时间</li>
+<li>nbf: 定义在什么时间之前，该jwt都是不可用的.</li>
+<li>iat: jwt的签发时间</li>
+<li>jti: jwt的唯一身份标识，主要用来作为一次性token,从而回避重放攻击。</li>
+</ul>
+<p><strong>公共的声明</strong> ：</p>
+<p>公共的声明可以添加任何的信息，一般添加用户的相关信息或其他业务需要的必要信息.但不建议添加敏感信息，因为该部分在客户端可进行解码.</p>
+<p><strong>私有的声明</strong> ：</p>
+<p>私有声明是提供者和消费者所共同定义的声明，一般不建议存放敏感信息。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   &quot;user&quot;:&quot;admin&quot;,</span><br><span class="line">   &quot;iat&quot;:1611129081</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="signature"><a href="#signature" class="headerlink" title="signature"></a><strong>signature</strong></h2><p><strong>jwt的第三部分是一个签证信息，这个签证信息由三部分组成：</strong></p>
+<ul>
+<li><strong>header (base64后的)</strong></li>
+<li><strong>payload (base64后的)</strong></li>
+<li><strong>secret</strong></li>
+</ul>
+<p>这个部分需要base64加密后的header和base64加密后的payload使用.连接组成的字符串，然后通过header中声明的加密方式进行加盐secret组合加密，然后就构成了jwt的第三部分。加密方式如下：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="comment">// javascript</span></span><br><span class="line"><span class="keyword">var</span> encodedString = base64UrlEncode(header) + <span class="string">'.'</span> + base64UrlEncode(payload);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> signature = HMACSHA256(encodedString, <span class="string">'secret'</span>);</span><br></pre></td></tr></table></figure>
+
+<p>值得注意的是，编码header和payload时使用的编码方式为<code>base64urlencode</code>，<code>base64url</code>编码是<code>base64</code>的修改版，为了方便在网络中传输使用了不同的编码表，它不会在末尾填充”=”号，并将标准Base64中的”+”和”/“分别改成了”-“和”_”。</p>
+<h1 id="攻击方法"><a href="#攻击方法" class="headerlink" title="攻击方法"></a>攻击方法</h1><h2 id="签名无效"><a href="#签名无效" class="headerlink" title="签名无效"></a><strong>签名无效</strong></h2><p>当用户端提交请求给应用程序，服务端可能没有对token签名进行校验，这样，攻击者便可以通过提供无效签名简单地绕过安全机制。</p>
+<p>直接修改payload内容，生成新token</p>
+<p>node 的jsonwebtoken库存在一个缺陷，也是jwt的常见攻击手法，当用户传入jwt secret为空时 jsonwebtoken会采用algorithm none进行解密，此时key为空。</p>
+<h2 id="空加密算法"><a href="#空加密算法" class="headerlink" title="空加密算法"></a><strong>空加密算法</strong></h2><p>JWT支持使用空加密算法，可以在header中指定alg为<code>None</code></p>
+<p><strong>将secret置空。利用node的jsonwentoken库已知缺陷：当jwt的secret为null或undefined时，jsonwebtoken会采用algorithm为none进行验证</strong></p>
+<p>因为alg为none,所以只要把signature设置为空（即不添加signature字段），提交到服务器，token都可以通过服务器的验证。</p>
+<p>使用以下脚本构造jwt</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> jwt</span><br><span class="line"></span><br><span class="line"><span class="comment"># payload</span></span><br><span class="line">token_dict = &#123;</span><br><span class="line">  <span class="string">"iss"</span>: <span class="string">"admin"</span>,</span><br><span class="line">  <span class="string">"iat"</span>: <span class="number">1611125518</span>,</span><br><span class="line">  <span class="string">"exp"</span>: <span class="number">1611132718</span>,</span><br><span class="line">  <span class="string">"nbf"</span>: <span class="number">1611125518</span>,</span><br><span class="line">  <span class="string">"sub"</span>: <span class="string">"admin"</span>,</span><br><span class="line">  <span class="string">"jti"</span>: <span class="string">"d185987a4bc016713e7398aa1fea6f7a0"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">headers = &#123;</span><br><span class="line">  <span class="string">"alg"</span>: <span class="string">"none"</span>,</span><br><span class="line">  <span class="string">"typ"</span>: <span class="string">"JWT"</span></span><br><span class="line">&#125;</span><br><span class="line">jwt_token = jwt.encode(token_dict,  <span class="comment"># payload, 有效载体</span></span><br><span class="line">                       <span class="string">""</span>,  <span class="comment"># 进行加密签名的密钥</span></span><br><span class="line">                       algorithm=<span class="string">"none"</span>,  <span class="comment"># 指明签名算法方式, 默认也是HS256</span></span><br><span class="line">                       headers=headers </span><br><span class="line">                       <span class="comment"># json web token 数据结构包含两部分, payload(有效载体), headers(标头)</span></span><br><span class="line">                       )</span><br><span class="line"></span><br><span class="line">print(jwt_token)</span><br></pre></td></tr></table></figure>
+
+<h2 id="修改算法RS256为HS256（非对称密码–-gt-对称密码）"><a href="#修改算法RS256为HS256（非对称密码–-gt-对称密码）" class="headerlink" title="修改算法RS256为HS256（非对称密码–&gt;对称密码）"></a><strong>修改算法RS256为HS256（非对称密码–&gt;对称密码）</strong></h2><p>JWT中最常用的两种算法为<code>HMAC</code>和<code>RSA</code></p>
+<blockquote>
+<p>HMAC(HS256):是一种对称加密算法，使用秘密密钥对每条消息进行签名和验证<br>RSA(RS256)：是一种非对称加密算法，使用私钥加密明文，公钥解密密文。</p>
+</blockquote>
+<p>在这两种算法中都是使用私钥对<code>signature</code>字段进行签名，只有拿到了加密时使用的私钥，才有可能伪造token。</p>
+<p>如果将算法从RS256更改为HS256，后端代码会使用公钥作为秘密密钥，然后使用HS256算法验证签名。由于公钥有时可以被攻击者获取到，所以攻击者可以修改header中算法为HS256，然后使用RSA公钥对数据进行签名。更改算法为HS256，即不存在公钥私钥问题，因为HMAC对称密码算法只有一个key</p>
+<h2 id="爆破密钥"><a href="#爆破密钥" class="headerlink" title="爆破密钥"></a><strong>爆破密钥</strong></h2><p>JWT 的密钥爆破需要在一定的前提下进行：</p>
+<ul>
+<li>知悉JWT使用的加密算法</li>
+<li>一段有效的、已签名的token</li>
+<li>签名用的密钥不复杂（弱密钥）</li>
+</ul>
+<p>使用方法：jwtcrack+token</p>
+<p>参考文章：</p>
+<p><a href="https://blog.csdn.net/qq_45521281/article/details/106073624" target="_blank" rel="noopener">jwt及jwt伪造</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/19/mysql%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -452,7 +639,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
