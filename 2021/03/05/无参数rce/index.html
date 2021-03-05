@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="WESAIIIのblog">
 <meta property="og:description" content="无参数RCE常见形式if(&#39;;&#39; &#x3D;&#x3D;&#x3D; preg_replace(&#39;&#x2F;[^\W]+\((?R)?\)&#x2F;&#39;, &#39;&#39;, $_GET[&#39;code&#39;])) &amp;#123;        eval($_GET[&#39;code&#39;]);&amp;#125;  无参数任意文件读取1.查看当前目录所有文件名print_r(scandir(&#39;.&#39;)); 绝对路径：print_r(realpath(&#39;.&amp;#">
 <meta property="article:published_time" content="2021-03-05T08:13:26.048Z">
-<meta property="article:modified_time" content="2021-02-18T15:54:48.623Z">
+<meta property="article:modified_time" content="2021-03-05T08:16:09.248Z">
 <meta property="article:author" content="Wesaiii">
 <meta name="twitter:card" content="summary">
 
@@ -369,6 +369,8 @@
 <p><code>ceil(sinh(cosh(tan(floor(sqrt(floor(phpversion())))))))</code>返回46</p>
 <p><code>ord(hebrevc(crypt(time())))</code>概率返回46</p>
 <p><code>ord(strrev(crypt(serialize(array()))))</code>概率返回46</p>
+ <a id="more"></a>
+
 <h5 id="2-读取当前目录文件"><a href="#2-读取当前目录文件" class="headerlink" title="2.读取当前目录文件"></a>2.读取当前目录文件</h5><p><code>show_source()</code>、<code>readfile</code>、<code>highlight_file</code>、<code>file_get_contents</code>、<code>readgzfile()</code>函数可读取文件。</p>
 <p>查看文件名的方法输出的是数组，文件名是数组的值，使用如下函数改变指针位置读取文件的数组：</p>
 <p><code>current()/pos()</code>：返回数组中当前单元</p>
